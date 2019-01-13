@@ -1,0 +1,12 @@
+.table {
+    width: 1500px;
+    display: block;
+    justify-content: center;
+    align-content:center;
+}
+thead {
+    display: block;
+    justify-content: center;
+    align-content: center;
+    width: 100%;
+}
