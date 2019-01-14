@@ -2,3 +2,12 @@
     background-color: darkslategray;
     color: white;
 }
+
+#addTrain {
+    height: 25px;
+    display: flex;
+    justify-content: center;
+    color: white;
+    align-content: center;
+    background-color: #003366;
+}
