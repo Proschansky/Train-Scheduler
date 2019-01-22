@@ -1,15 +1,13 @@
-var config = "javascript\config.js"
+var config = {
+  apiKey: "AIzaSyCOOe1SrT6KkfFGtxLJk9m7yLvxSJLf71c",
+  authDomain: "trainscheduler-a351b.firebaseapp.com",
+  databaseURL: "https://trainscheduler-a351b.firebaseio.com",
+  projectId: "trainscheduler-a351b",
+  storageBucket: "trainscheduler-a351b.appspot.com",
+  messagingSenderId: "786332381840"
+};
 
-var login = {
-    apiKey: config.apiKey,
-    authDomain: config.authDomain,
-    databaseURL: config.databaseURL,
-    projectId: config.projectId,
-    storageBucket: config.storageBucket,
-    messagingSenderId: config.messagingSenderId,
-  };
-
-  firebase.initializeApp(login);
+  firebase.initializeApp(config);
 
   var database = firebase.database();
 
