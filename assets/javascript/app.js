@@ -1,3 +1,5 @@
+var config = "javascript\config.js"
+
 var login = {
     apiKey: config.apiKey,
     authDomain: config.authDomain,
