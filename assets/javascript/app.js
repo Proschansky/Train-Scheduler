@@ -9,6 +9,12 @@ var config = {
 
   firebase.initializeApp(config);
 
+function timedRefresh(timeoutPeriod) {
+  setTimeout("location.reload(true);",timeoutPeriod);
+}
+
+window.onload = timedRefresh(30000);
+
 
 // Create a variable to reference the database
     var database = firebase.database();
@@ -49,7 +55,7 @@ var config = {
   console.log(trainInfo.dateAdded);
 
   // Alert
-  // alert("Train was successfully added");
+  alert("Train was successfully added");
 
   // Clears all of the text-boxes
   $("#trainname-input").val("");
@@ -67,8 +73,8 @@ database.ref().on("child_added", function(childSnapshot, prevChildKey) {
   var firstTime = childSnapshot.val().formfirsttime;
 
   // First Time (pushed back 1 year to make sure it comes before current time)
-  var firstTimeConverted = moment(firstTime, "hh:mm").subtract(1, "years");
-  console.log(firstTimeConverted);
+  var firstTime = moment(firstTime, "hh:mm").subtract(1, "years");
+  console.log(firstTime);
 
   //determine Current Time
   var currentTime = moment();
@@ -78,7 +84,7 @@ database.ref().on("child_added", function(childSnapshot, prevChildKey) {
   $("#timer").text(currentTime.format("hh:mm a"));
 
   // Difference between the times
-  var diffTime = moment().diff(moment(firstTimeConverted), "minutes");
+  var diffTime = moment().diff(moment(firstTime), "minutes");
   console.log("DIFFERENCE IN TIME: " + diffTime);
 
   // Time apart (remainder)
@@ -119,31 +125,34 @@ $("body").on("click", ".fa-trash", function() {
   alert("delete button clicked");
 });
 
-document.onload = function (){
+function loadTrainInfo (){
   $("#train-table > tbody").empty();
   $("#train-table > tbody").append("<tr><td>" + '<i class="fa fa-trash" aria-hidden="true"></i>' + "</td><td>" + train + "</td><td>" + destination + "</td><td>" +
   frequency + "</td><td>" + nextArrival + "</td><td>" + minutesAway + "</td></tr>");
 }
+document.onload = loadTrainInfo();
 //I want to update time of minutesAway and nextArrival 
 //I am not sure how to call the previous function and use the setInterval or setTimeout to update the time in that function, so once each train is called and time passes then this function empties the table body and pulls each train and redoes the math
 // Update minutes away by triggering change in firebase children
 function timeUpdater() {
-  //empty tbody before appending new information
-  // $("#train-table > tbody").empty();
+  // empty tbody before appending new information
+  $("#train-table > tbody").empty();
   
   database.ref().on("child_added", function(childSnapshot, prevChildKey) {  
 
   // First Time (pushed back 1 year to make sure it comes before current time)
-  var firstTimeConverted = moment(firstTime, "hh:mm").subtract(1, "years");
-  console.log(firstTimeConverted);
+  var firstTime = moment(firstTime, "hh:mm").subtract(1, "years");
+  console.log(firstTime);
 
   // Current Time
   var currentTime = moment();
+
   console.log("CURRENT TIME: " + moment(currentTime).format("hh:mm a"));
-  // $("#timer").html(h + ":" + m);
+  $("#timer").html(h + ":" + m);
+
   $("#timer").text(currentTime.format("hh:mm a"));
   // Difference between the times
-  var diffTime = moment().diff(moment(firstTimeConverted), "minutes");
+  var diffTime = moment().diff(moment(firstTime), "minutes");
   console.log("DIFFERENCE IN TIME: " + diffTime);
 
   // Time apart (remainder)
@@ -152,7 +161,7 @@ function timeUpdater() {
 
   //determine Minutes Away
   var minutesAway = frequency - tRemainder;
-  console.log("MINUTES TILL TRAIN: " + minutesAway);
+  console.log("MINUTES TIL TRAIN: " + minutesAway);
 
   //determine Next Train Arrival
   var nextArrival = moment().add(minutesAway, "minutes").format("hh:mm a");
@@ -164,11 +173,15 @@ function timeUpdater() {
   // Add each train's data into the table row
   $("#train-table > tbody").append("<tr><td>" + '<i class="fa fa-trash" aria-hidden="true"></i>' + "</td><td>" + train + "</td><td>" + destination + "</td><td>" +
   frequency + "</td><td>" + nextArrival + "</td><td>" + minutesAway + "</td></tr>");
+  
+  loadTrainInfo();
+  
 
-  })
-};
+  setInterval(timeUpdater, 30000);
 
-setInterval(timeUpdater, 6000);
+})};
+
+
 
 // Create Error Handling
 
