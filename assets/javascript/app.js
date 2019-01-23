@@ -9,7 +9,6 @@ var config = {
 
   firebase.initializeApp(config);
 
-  var database = firebase.database();
 
 // Create a variable to reference the database
     var database = firebase.database();
@@ -120,18 +119,19 @@ $("body").on("click", ".fa-trash", function() {
   alert("delete button clicked");
 });
 
+document.onload = function (){
+  $("#train-table > tbody").empty();
+  $("#train-table > tbody").append("<tr><td>" + '<i class="fa fa-trash" aria-hidden="true"></i>' + "</td><td>" + train + "</td><td>" + destination + "</td><td>" +
+  frequency + "</td><td>" + nextArrival + "</td><td>" + minutesAway + "</td></tr>");
+}
 //I want to update time of minutesAway and nextArrival 
 //I am not sure how to call the previous function and use the setInterval or setTimeout to update the time in that function, so once each train is called and time passes then this function empties the table body and pulls each train and redoes the math
 // Update minutes away by triggering change in firebase children
 function timeUpdater() {
   //empty tbody before appending new information
-  $("#train-table > tbody").empty();
+  // $("#train-table > tbody").empty();
   
   database.ref().on("child_added", function(childSnapshot, prevChildKey) {  
-  var train = childSnapshot.val().formtrain;
-  var destination = childSnapshot.val().formdestination;
-  var frequency = childSnapshot.val().formfrequency;
-  var firstTime = childSnapshot.val().formfirsttime;
 
   // First Time (pushed back 1 year to make sure it comes before current time)
   var firstTimeConverted = moment(firstTime, "hh:mm").subtract(1, "years");
