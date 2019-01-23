@@ -9,6 +9,7 @@ var config = {
 
   firebase.initializeApp(config);
 
+  // Set page to reload every thirty seconds in order to update.
 function timedRefresh(timeoutPeriod) {
   setTimeout("location.reload(true);",timeoutPeriod);
 }
